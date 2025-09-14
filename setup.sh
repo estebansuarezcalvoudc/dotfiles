@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Function to backup and remove existing files/directories
+# Function to backup and remove existing files/directories/symlinks
 backup_and_remove() {
-    if [ -e "$1" ]; then
+    if [ -L "$1" ]; then
+        # It's a symbolic link - just remove it
+        rm "$1"
+        echo "Removed existing symlink $1"
+    elif [ -e "$1" ]; then
+        # It's a regular file or directory - back it up
         mv "$1" "$1.backup"
         echo "Backed up $1 to $1.backup"
     fi
@@ -32,5 +37,8 @@ ln -s "$DOTFILES_DIR/tmux/.tmux.conf" ~/.tmux.conf
 
 backup_and_remove ~/.fonts
 ln -s "$DOTFILES_DIR/fonts/.fonts" ~/.fonts
+
+backup_and_remove ~/.oh-my-zsh/themes/custom_clean.zsh-theme
+ln -s "$DOTFILES_DIR/zsh/custom_clean.zsh-theme" ~/.oh-my-zsh/themes/custom_clean.zsh-theme
 
 echo "Dotfiles installation complete!"
