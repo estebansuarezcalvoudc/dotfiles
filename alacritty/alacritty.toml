@@ -7,3 +7,7 @@ bold_italic.family = "JetBrainsMono NF"
 
 size = 12.0
 
+[[keyboard.bindings]]
+
+key = "F11"
+action = "ToggleFullscreen"
