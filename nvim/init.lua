@@ -11,8 +11,8 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "lua", "javascript", "typescript", "javascriptreact", "typescriptreact" },
   callback = function()
     vim.bo.expandtab = true -- use spaces
-    vim.bo.tabstop = 2      -- number of spaces per tab
-    vim.bo.shiftwidth = 2   -- number of spaces for auto-indent
+    vim.bo.tabstop = 2    -- number of spaces per tab
+    vim.bo.shiftwidth = 2 -- number of spaces for auto-indent
     vim.bo.softtabstop = 2
   end,
 })
@@ -35,7 +35,7 @@ vim.keymap.set("i", "<Tab>", function()
   local next_char = line:sub(col, col)
 
   -- Characters you want to "tab out" of
-  local tabout_chars = { [")"]=true, ["}"]=true, ["]"]=true, [";"]=true, ['"']=true, ["'"]=true }
+  local tabout_chars = { [")"] = true, ["}"] = true, ["]"] = true, [";"] = true, ['"'] = true, ["'"] = true }
 
   if tabout_chars[next_char] then
     return "<Right>"
@@ -44,4 +44,20 @@ vim.keymap.set("i", "<Tab>", function()
   end
 end, { expr = true, noremap = true })
 
+-- NORMAL mode
+vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true, silent = true })
 
+-- VISUAL mode (keep selection after indent/de-indent)
+vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
+vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
+
+-- INSERT mode
+-- Tab indents, Shift-Tab de-indents
+vim.keymap.set("i", "<Tab>", function()
+  return "<C-t>"
+end, { expr = true, noremap = true })
+
+vim.keymap.set("i", "<S-Tab>", function()
+  return "<C-d>"
+end, { expr = true, noremap = true })
