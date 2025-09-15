@@ -17,6 +17,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Show line numbers
 vim.opt.number = true
 
 -- Move current line up/down with Alt+Arrow
@@ -42,4 +43,5 @@ vim.keymap.set("i", "<Tab>", function()
     return "<Tab>"
   end
 end, { expr = true, noremap = true })
+
 
