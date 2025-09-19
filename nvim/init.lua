@@ -53,11 +53,7 @@ vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 
 -- INSERT mode
--- Tab indents, Shift-Tab de-indents
-vim.keymap.set("i", "<Tab>", function()
-  return "<C-t>"
-end, { expr = true, noremap = true })
-
+-- Shift-Tab de-indents
 vim.keymap.set("i", "<S-Tab>", function()
   return "<C-d>"
 end, { expr = true, noremap = true })

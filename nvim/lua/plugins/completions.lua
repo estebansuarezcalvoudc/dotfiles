@@ -31,6 +31,9 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
 
+          -- see references
+          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts),
+
           -- Trigger completion manually
           ["<C-Space>"] = cmp.mapping.complete(),
 
@@ -38,8 +41,8 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
 
           -- Move in completion menu
-          ["<C-j>"] = cmp.mapping.select_next_item(),
-          ["<C-k>"] = cmp.mapping.select_prev_item(),
+          ["<A-j>"] = cmp.mapping.select_next_item(),
+          ["<A-k>"] = cmp.mapping.select_prev_item(),
 
           -- Confirm selection with Tab
           ["<Tab>"] = cmp.mapping(function(fallback)
