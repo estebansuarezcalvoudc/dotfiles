@@ -29,11 +29,8 @@ ln -s "$DOTFILES_DIR/alacritty/alacritty.toml" ~/.config/alacritty.toml
 backup_and_remove ~/.zshrc
 ln -s "$DOTFILES_DIR/zsh/.zshrc" ~/.zshrc
 
-backup_and_remove ~/.tmux
-ln -s "$DOTFILES_DIR/tmux/.tmux" ~/.tmux
-
-backup_and_remove ~/.tmux.conf
-ln -s "$DOTFILES_DIR/tmux/.tmux.conf" ~/.tmux.conf
+backup_and_remove ~/.config/tmux
+ln -s "$DOTFILES_DIR/tmux" ~/.config/tmux
 
 backup_and_remove ~/.fonts
 ln -s "$DOTFILES_DIR/fonts/.fonts" ~/.fonts
