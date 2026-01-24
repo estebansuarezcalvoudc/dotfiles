@@ -3,6 +3,9 @@ require("config.lazy")
 -- Sync clipboard with system
 vim.opt.clipboard = "unnamedplus"
 
+-- Mantener signcolumn siempre invisible (evita el desplazamiento)
+vim.opt.signcolumn = "no"  -- Opciones: "yes", "no", "auto", "yes:1", "yes:2"
+
 -- Global defaults: 4 spaces
 vim.o.expandtab = true
 vim.o.tabstop = 4
