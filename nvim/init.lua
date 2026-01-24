@@ -60,3 +60,8 @@ vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 vim.keymap.set("i", "<S-Tab>", function()
   return "<C-d>"
 end, { expr = true, noremap = true })
+
+-- Comando :Keymaps para buscar atajos
+vim.api.nvim_create_user_command('Keymaps', function()
+  require('telescope.builtin').keymaps()
+end, { desc = "Search keymaps with Telescope" })
