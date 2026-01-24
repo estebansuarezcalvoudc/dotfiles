@@ -31,9 +31,6 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
 
-          -- see references
-          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts),
-
           -- Trigger completion manually
           ["<C-Space>"] = cmp.mapping.complete(),
 
@@ -64,8 +61,18 @@ return {
             end
           end, { "i", "s" }),
 
-          -- Optional: Enter to confirm
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          -- Enter: only confirm if explicitly selected, otherwise new line
+          ["<CR>"] = cmp.mapping({
+            i = function(fallback)
+              if cmp.visible() and cmp.get_active_entry() then
+                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+              else
+                fallback()
+              end
+            end,
+            s = cmp.mapping.confirm({ select = true }),
+            c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+          }),
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
