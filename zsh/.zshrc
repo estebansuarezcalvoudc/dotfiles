@@ -26,23 +26,15 @@ alias vim="nvim"
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# export PATH="$HOME/anaconda3/bin:$PATH"  # commented out by conda initialize
 # >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/esteban/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/esteban/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/esteban/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/esteban/anaconda3/bin:$PATH"
+# Initialize conda if it exists
+for conda_path in "$HOME/anaconda3" "$HOME/miniconda3" "$HOME/opt/anaconda3" "$HOME/opt/miniconda3"; do
+    if [ -f "$conda_path/etc/profile.d/conda.sh" ]; then
+        . "$conda_path/etc/profile.d/conda.sh"
+        break
     fi
-fi
-unset __conda_setup
+done
 # <<< conda initialize <<<
-
-alias ls="lsd"
 
 . "$HOME/.atuin/bin/env"
 
