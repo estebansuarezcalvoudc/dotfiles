@@ -41,10 +41,22 @@ done
 eval "$(atuin init zsh)"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 
-alias copy='xclip -selection clipboard'
+# Clipboard alias (cross-platform)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    alias copy='pbcopy'
+    alias paste='pbpaste'
+elif command -v xclip &> /dev/null; then
+    # Linux with xclip
+    alias copy='xclip -selection clipboard'
+    alias paste='xclip -selection clipboard -o'
+elif command -v xsel &> /dev/null; then
+    # Linux with xsel
+    alias copy='xsel --clipboard --input'
+    alias paste='xsel --clipboard --output'
+fi
 
-# --- Herramientas BibTeX ---
-
+# >>> Herramientas BibTeX >>>
 # 1. Convertir RIS a BIB solamente
 # Uso: ris2bib archivo.ris
 ris2bib() {
@@ -57,3 +69,4 @@ ris2clip() {
     # Usamos 'tee' para guardar en fichero Y pasar la salida al siguiente comando
     ris2xml "$1" | xml2bib -b | tee "${1%.*}.bib" | xclip -selection clipboard
 }
+# <<< Herramientas BibTeX <<<

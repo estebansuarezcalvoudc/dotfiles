@@ -1,5 +1,8 @@
 require("config.lazy")
 
+-- Sync clipboard with system
+vim.opt.clipboard = "unnamedplus"
+
 -- Global defaults: 4 spaces
 vim.o.expandtab = true
 vim.o.tabstop = 4

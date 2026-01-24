@@ -91,6 +91,18 @@ install_tools() {
     else
         print_info "atuin already installed"
     fi
+
+    # Install xclip for clipboard support
+    if ! command -v xclip &> /dev/null; then
+        print_info "Installing xclip for clipboard support..."
+        if [[ "$OS" == "ubuntu"* ]] || [[ "$OS" == "debian"* ]]; then
+            sudo apt-get install -y xclip
+        elif [[ "$OS" == "fedora"* ]]; then
+            sudo dnf install -y xclip
+        elif [[ "$OS" == "arch"* ]]; then
+            sudo pacman -S --noconfirm xclip
+        fi
+    fi
 }
 
 # Install Oh My Zsh
