@@ -32,8 +32,6 @@ for conda_path in "$HOME/anaconda3" "$HOME/miniconda3" "$HOME/opt/anaconda3" "$H
 done
 # <<< conda initialize <<<
 
-. "$HOME/.atuin/bin/env"
-
 eval "$(atuin init zsh)"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 
