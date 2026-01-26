@@ -154,6 +154,10 @@ create_symlinks() {
     # Fonts
     backup_and_remove ~/.fonts
     ln -s "$DOTFILES_DIR/fonts/.fonts" ~/.fonts
+
+    # Atuin
+    backup_and_remove ~/.config/atuin
+    ln -s "$DOTFILES_DIR/atuin" ~/.config/atuin
     
     # Oh My Zsh custom theme
     if [ -d "$HOME/.oh-my-zsh" ]; then
