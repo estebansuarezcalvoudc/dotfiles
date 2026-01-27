@@ -6,7 +6,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="custom_clean"
 
-plugins=(fzf-tab)
+# plugins=(fzf-tab)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -64,3 +64,7 @@ ris2clip() {
     ris2xml "$1" | xml2bib -b | tee "${1%.*}.bib" | xclip -selection clipboard
 }
 # <<< Herramientas BibTeX <<<
+
+alias theme-toggle='bash ~/scripts/toggle-theme.sh'
+# Cargar el tema al iniciar la shell
+export THEME_MODE=$(cat ~/.config/theme-mode 2>/dev/null || echo "dark")

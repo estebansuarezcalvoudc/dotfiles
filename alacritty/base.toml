@@ -1,0 +1,13 @@
+[font]
+normal.family = "JetBrainsMono NF"
+bold.family = "JetBrainsMono NF"
+italic.family = "JetBrainsMono NF"
+bold_italic.family = "JetBrainsMono NF"
+size = 12.0
+
+[[keyboard.bindings]]
+key = "F11"
+action = "ToggleFullscreen"
+
+[window]
+blur = true
