@@ -1,1 +1,3 @@
 *.uuid
+alacritty.toml
+tmux.conf
