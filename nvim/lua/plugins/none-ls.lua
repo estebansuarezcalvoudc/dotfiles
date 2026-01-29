@@ -8,6 +8,8 @@ return {
 		local null_ls = require("null-ls")
 
 		null_ls.setup({
+			timeout_ms = 10000,
+
 			sources = {
 				-- Python
 				null_ls.builtins.formatting.black,
@@ -22,7 +24,9 @@ return {
 			},
 		})
 
-		vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, { desc = "Format file" })
+		vim.keymap.set("n", "<leader>gf", function()
+			vim.lsp.buf.format({ timeout_ms = 10000 })
+		end, { desc = "Format file" })
 
 		-- Organizar imports con code actions
 		vim.keymap.set("n", "<leader>go", function()
