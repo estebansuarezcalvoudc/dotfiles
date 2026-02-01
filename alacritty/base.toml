@@ -11,3 +11,4 @@ action = "ToggleFullscreen"
 
 [window]
 blur = true
+padding = { x = 12, y = 8 }
