@@ -103,6 +103,8 @@ install_tools() {
             sudo pacman -S --noconfirm xclip
         fi
     fi
+
+    brew install zsh-autosuggestions zsh-syntax-highlighting
 }
 
 # Install Oh My Zsh

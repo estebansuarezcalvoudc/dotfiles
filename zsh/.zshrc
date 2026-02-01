@@ -19,8 +19,10 @@ export NVM_DIR="$HOME/.nvm"
 alias vim="nvim"
 alias ls="lsd"
 
-
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /home/linuxbrew/.linuxbrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # >>> conda initialize >>>
 # Initialize conda if it exists
