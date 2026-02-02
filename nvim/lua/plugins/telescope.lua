@@ -8,6 +8,35 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
 			require("telescope").setup({
+				defaults = {
+					file_ignore_patterns = { 
+						"^.git/",
+						"node_modules/",
+						"venv/",
+						".venv/",
+						"__pycache__/",
+						".pytest_cache/",
+						".mypy_cache/",
+						"%.pyc$",
+					},
+					vimgrep_arguments = {
+						"rg",
+						"--color=never",
+						"--no-heading",
+						"--with-filename",
+						"--line-number",
+						"--column",
+						"--smart-case",
+						"--hidden",
+						"--no-ignore",
+					},
+				},
+				pickers = {
+					find_files = {
+						hidden = true,
+						no_ignore = true,
+					},
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown({}),
