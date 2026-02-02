@@ -48,3 +48,21 @@ nvr --serverlist | while read server; do
     nvr --servername "$server" -c "lua require('theme-switcher').reload()" 2>/dev/null || true
 done
 
+# === BTOP ===
+BTOP_DIR="$HOME/dotfiles/btop/themes"
+BTOP_CONFIG="$HOME/.config/btop"
+
+if [ -d "$BTOP_CONFIG" ]; then
+    mkdir -p "$BTOP_CONFIG/themes"
+    
+    if [ "$NEW_THEME" = "light" ]; then
+        cp "$BTOP_DIR/catppuccin-latte.theme" "$BTOP_CONFIG/themes/catppuccin-latte.theme"
+        sed -i 's/^color_theme = .*/color_theme = "catppuccin-latte"/' "$BTOP_CONFIG/btop.conf"
+    else
+        cp "$BTOP_DIR/catppuccin-mocha.theme" "$BTOP_CONFIG/themes/catppuccin-mocha.theme"
+        sed -i 's/^color_theme = .*/color_theme = "catppuccin-mocha"/' "$BTOP_CONFIG/btop.conf"
+    fi
+    
+    # btop will automatically reload the theme on next update cycle
+fi
+
