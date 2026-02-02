@@ -112,6 +112,7 @@ return {
 			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
 			vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+			vim.keymap.set("n", "<leader>u", require("telescope.builtin").lsp_references, { desc = "Find usages/references" })
 
 			-- Fix all problems
 			vim.keymap.set("n", "<leader>ri", function()
