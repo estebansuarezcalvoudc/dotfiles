@@ -62,8 +62,6 @@ function M.apply_theme()
   vim.schedule(function()
     M.apply_custom_highlights()
   end)
-  
-  print("🎨 Tema aplicado: " .. theme)
 end
 
 -- Función para recargar el tema (llamada desde el script externo)
