@@ -15,8 +15,9 @@ return {
 				null_ls.builtins.formatting.black,
 
 				-- JavaScript/TypeScript
-				null_ls.builtins.formatting.prettier,
-				require("none-ls.diagnostics.eslint_d"), -- Desde none-ls-extras
+				require("none-ls.formatting.eslint_d"), -- ESLint fix primero
+				null_ls.builtins.formatting.prettier, -- Prettier después
+				require("none-ls.diagnostics.eslint_d"),
 				require("none-ls.code_actions.eslint_d"),
 
 				-- Lua

@@ -125,6 +125,9 @@ return {
 				})
 				vim.notify("✓ Applied all fixes", vim.log.levels.INFO)
 			end, { desc = "Fix all problems" })
+
+			-- Show all errors in current buffer
+			vim.keymap.set("n", "<leader>e", vim.diagnostic.setloclist, { desc = "Show buffer errors" })
 		end,
 	},
 }
