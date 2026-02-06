@@ -25,6 +25,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Show line numbers
 vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- Move current line up/down with Alt+Arrow
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { silent = true })
@@ -63,6 +64,11 @@ vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 vim.keymap.set("i", "<S-Tab>", function()
   return "<C-d>"
 end, { expr = true, noremap = true })
+
+-- Toggle relative line numbers
+vim.keymap.set("n", "<leader>n", function()
+  vim.opt.relativenumber = not vim.opt.relativenumber:get()
+end, { noremap = true, silent = true, desc = "Toggle relative line numbers" })
 
 -- Comando :Keymaps para buscar atajos
 vim.api.nvim_create_user_command('Keymaps', function()
