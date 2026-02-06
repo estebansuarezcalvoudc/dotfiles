@@ -12,3 +12,4 @@ action = "ToggleFullscreen"
 [window]
 blur = true
 padding = { x = 12, y = 8 }
+startup_mode = "Fullscreen"
