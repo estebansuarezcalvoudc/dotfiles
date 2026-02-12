@@ -35,21 +35,8 @@ vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { silent = true })
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { silent = true })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { silent = true })
 
--- Tab out
-vim.keymap.set("i", "<Tab>", function()
-  local col = vim.fn.col(".")
-  local line = vim.fn.getline(".")
-  local next_char = line:sub(col, col)
-
-  -- Characters you want to "tab out" of
-  local tabout_chars = { [")"] = true, ["}"] = true, ["]"] = true, [";"] = true, ['"'] = true, ["'"] = true }
-
-  if tabout_chars[next_char] then
-    return "<Right>"
-  else
-    return "<Tab>"
-  end
-end, { expr = true, noremap = true })
+-- Tab out (esto se maneja ahora en completions.lua para evitar conflictos con nvim-cmp)
+-- El mapping de Tab en completions.lua tiene prioridad
 
 -- NORMAL mode
 vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true })

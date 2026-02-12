@@ -36,6 +36,12 @@ return {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
+        completion = {
+          autocomplete = { 
+            require('cmp.types').cmp.TriggerEvent.TextChanged,
+            require('cmp.types').cmp.TriggerEvent.InsertEnter,
+          },
+        },
         formatting = {
           format = require("tailwindcss-colorizer-cmp").formatter,
         },
@@ -51,17 +57,27 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
 
           -- Move in completion menu
-          ["<A-j>"] = cmp.mapping.select_next_item(),
-          ["<A-k>"] = cmp.mapping.select_prev_item(),
+          ["<A-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+          ["<A-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
 
-          -- Confirm selection with Tab
+          -- Tab behavior: complete -> jump snippet -> tab out of brackets -> normal tab
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.confirm({ select = true })
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
             else
-              fallback()
+              -- Tab out of brackets/quotes when cursor is before them
+              local col = vim.fn.col(".")
+              local line = vim.fn.getline(".")
+              local next_char = line:sub(col, col)
+              local tabout_chars = { [")"] = true, ["}"] = true, ["]"] = true, [";"] = true, ['"'] = true, ["'"] = true }
+              
+              if tabout_chars[next_char] then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Right>", true, false, true), "n", false)
+              else
+                fallback()
+              end
             end
           end, { "i", "s" }),
 
