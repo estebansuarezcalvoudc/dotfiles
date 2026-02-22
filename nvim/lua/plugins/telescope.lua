@@ -18,6 +18,7 @@ return {
 						".pytest_cache/",
 						".mypy_cache/",
 						"%.pyc$",
+						"%.log$",
 					},
 					vimgrep_arguments = {
 						"rg",
