@@ -12,6 +12,7 @@ return {
 
 			sources = {
 				-- Python
+				null_ls.builtins.formatting.isort,
 				null_ls.builtins.formatting.black,
 
 				-- JavaScript/TypeScript
