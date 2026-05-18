@@ -52,6 +52,7 @@ return {
 
           -- Trigger completion manually
           ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-@>"] = cmp.mapping.complete(),
 
           -- Abort completion
           ["<C-e>"] = cmp.mapping.abort(),
