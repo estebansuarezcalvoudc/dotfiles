@@ -70,3 +70,6 @@ ris2clip() {
 alias theme-toggle='bash ~/scripts/toggle-theme.sh'
 # Cargar el tema al iniciar la shell
 export THEME_MODE=$(cat ~/.config/theme-mode 2>/dev/null || echo "dark")
+
+alias push_survival_analysis="rsync -auvz --delete --exclude='visuals/' --exclude='checkpoints/' --exclude='logs/' --exclude='__pycache__/' --exclude='dataset_RedEs' ~/FSAS/survival_analysis/ aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/"
+alias fetch_survival_analysis="rsync -auvz --delete --exclude='visuals/' --exclude='checkpoints/' --exclude='logs/' --exclude='__pycache__/' --exclude='dataset_RedEs' aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/ ~/FSAS/survival_analysis/"

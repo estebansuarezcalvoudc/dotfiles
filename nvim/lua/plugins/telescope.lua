@@ -19,6 +19,7 @@ return {
 						".mypy_cache/",
 						"%.pyc$",
 						"%.log$",
+            "dataset_RedEs/"
 					},
 					vimgrep_arguments = {
 						"rg",
