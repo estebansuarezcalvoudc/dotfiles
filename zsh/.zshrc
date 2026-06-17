@@ -71,5 +71,19 @@ alias theme-toggle='bash ~/scripts/toggle-theme.sh'
 # Cargar el tema al iniciar la shell
 export THEME_MODE=$(cat ~/.config/theme-mode 2>/dev/null || echo "dark")
 
-alias push_survival_analysis="rsync -auvz --delete --exclude='visuals/' --exclude='checkpoints/' --exclude='logs/' --exclude='__pycache__/' --exclude='dataset_RedEs' ~/FSAS/survival_analysis/ aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/"
-alias fetch_survival_analysis="rsync -auvz --delete --exclude='visuals/' --exclude='checkpoints/' --exclude='logs/' --exclude='__pycache__/' --exclude='dataset_RedEs' aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/ ~/FSAS/survival_analysis/"
+
+# >>> Comandos para FSAS/survival_analysis >>>
+
+alias push_survival_analysis="rsync -auvz --delete --exclude='.git/' --exclude='mlflow/' --exclude='mlflow.db' --exclude='visuals/' --exclude='checkpoints/' --exclude='out/' --exclude='logs/' --exclude='__pycache__/' --exclude='dataset_RedEs' ~/FSAS/survival_analysis/ aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/"
+alias fetch_survival_analysis="rsync -auvz --delete --exclude='.git/' --exclude='mlflow/' --exclude='mlflow.db' --exclude='visuals/' --exclude='checkpoints/' --exclude='out/' --exclude='logs/' --exclude='__pycache__/' --exclude='dataset_RedEs' aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/ ~/FSAS/survival_analysis/"
+
+# push: proyecto/mlflow.db → cluster:/ruta/mlflow.db
+alias push_mlflowdb="rsync -av \
+  ~/FSAS/survival_analysis/mlflow.db \
+  aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/mlflow.db"
+# fetch: cluster:/ruta/mlflow.db → proyecto/mlflow.db
+alias fetch_mlflowdb="rsync -av \
+  aborrallo@lantik:/home/lantik-test/aborrallo/esteban_suarez/survival_analysis/mlflow.db \
+  ~/FSAS/survival_analysis/mlflow.db"
+
+# <<< Comandos para FSAS/survival_analysis <<<
