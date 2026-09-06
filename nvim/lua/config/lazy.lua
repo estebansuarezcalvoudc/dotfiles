@@ -40,3 +40,6 @@ require("lazy").setup({
     notify = false, -- Pero no notificar al inicio
   },
 })
+
+-- Navegación LIFO por pila de buffers (<leader>k / <leader>j)
+require("config.bufstack").setup()
