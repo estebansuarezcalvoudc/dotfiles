@@ -28,6 +28,8 @@ backup_and_remove() {
 
 # Install needed packages (most already ship with Omarchy; --needed is idempotent)
 install_packages() {
+    print_info "Syncing package databases..."
+    sudo pacman -Sy
     print_info "Installing packages..."
     sudo pacman -S --needed --noconfirm \
         zsh \
@@ -39,7 +41,8 @@ install_packages() {
         btop \
         lazygit \
         wl-clipboard \
-        tree
+        tree \
+        alacritty
 }
 
 # Install Oh My Zsh (unattended; keeps our .zshrc symlink intact afterwards)
