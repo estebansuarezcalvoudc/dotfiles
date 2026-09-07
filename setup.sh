@@ -51,6 +51,7 @@ install_packages() {
         btop \
         lazygit \
         wl-clipboard
+    # JetBrainsMono Nerd Font ships with Omarchy (ttf-jetbrains-mono-nerd-basic).
 }
 
 # Install Oh My Zsh (unattended; keeps our .zshrc symlink intact afterwards)
@@ -104,10 +105,6 @@ create_symlinks() {
     # Atuin
     backup_and_remove ~/.config/atuin
     ln -s "$DOTFILES_DIR/atuin" ~/.config/atuin
-
-    # Fonts
-    backup_and_remove ~/.fonts
-    ln -s "$DOTFILES_DIR/fonts/.fonts" ~/.fonts
 
     # Refresh font cache
     print_info "Refreshing font cache..."
