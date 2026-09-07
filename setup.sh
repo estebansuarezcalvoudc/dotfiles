@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Omarchy dotfiles installer
+# Run this right after a fresh Omarchy install (it assumes Omarchy / Arch Linux).
+
 set -e  # Exit on error
 
 # Colors for output
@@ -8,20 +11,11 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Function to print colored messages
-print_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
-}
+print_info()  { echo -e "${GREEN}[INFO]${NC} $1"; }
+print_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
+print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
-print_warn() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-# Function to backup and remove existing files/directories/symlinks
+# Backup and remove existing files/directories/symlinks before linking
 backup_and_remove() {
     if [ -L "$1" ]; then
         rm "$1"
@@ -32,82 +26,34 @@ backup_and_remove() {
     fi
 }
 
-# Detect OS
-detect_os() {
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if [ -f /etc/os-release ]; then
-            . /etc/os-release
-            OS=$ID
-        else
-            OS="unknown"
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        OS="macos"
-    else
-        OS="unknown"
+# Make sure we are on Omarchy (Hyprland-based Arch distribution)
+check_omarchy() {
+    if [ ! -d /usr/share/omarchy ] || ! command -v omarchy &> /dev/null; then
+        print_error "This setup is for Omarchy (https://omarchy.org). Aborting."
+        exit 1
     fi
-    print_info "Detected OS: $OS"
+    print_info "Omarchy detected: $(omarchy version 2>/dev/null | head -1)"
 }
 
-# Install Homebrew if not present
-install_homebrew() {
-    if ! command -v brew &> /dev/null; then
-        print_info "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        
-        # Add brew to PATH for Linux
-        if [[ "$OS" == "linux-gnu"* ]] || [[ "$OS" == "ubuntu"* ]] || [[ "$OS" == "debian"* ]]; then
-            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        fi
-    else
-        print_info "Homebrew already installed"
-    fi
+# Install needed packages (most already ship with Omarchy; --needed is idempotent)
+install_packages() {
+    print_info "Installing packages..."
+    sudo pacman -S --needed --noconfirm \
+        zsh \
+        zsh-autosuggestions \
+        zsh-syntax-highlighting \
+        neovim \
+        tmux \
+        alacritty \
+        atuin \
+        fzf \
+        lsd \
+        btop \
+        lazygit \
+        wl-clipboard
 }
 
-# Install essential tools
-install_tools() {
-    print_info "Installing essential tools..."
-    
-    # Install lsd (modern ls replacement)
-    if ! command -v lsd &> /dev/null; then
-        print_info "Installing lsd..."
-        brew install lsd
-    else
-        print_info "lsd already installed"
-    fi
-    
-    # Install fzf (fuzzy finder)
-    if ! command -v fzf &> /dev/null; then
-        print_info "Installing fzf..."
-        brew install fzf
-    else
-        print_info "fzf already installed"
-    fi
-    
-    # Install atuin (shell history)
-    if ! command -v atuin &> /dev/null; then
-        print_info "Installing atuin..."
-        brew install atuin
-    else
-        print_info "atuin already installed"
-    fi
-
-    # Install xclip for clipboard support
-    if ! command -v xclip &> /dev/null; then
-        print_info "Installing xclip for clipboard support..."
-        if [[ "$OS" == "ubuntu"* ]] || [[ "$OS" == "debian"* ]]; then
-            sudo apt-get install -y xclip
-        elif [[ "$OS" == "fedora"* ]]; then
-            sudo dnf install -y xclip
-        elif [[ "$OS" == "arch"* ]]; then
-            sudo pacman -S --noconfirm xclip
-        fi
-    fi
-
-    brew install zsh-autosuggestions zsh-syntax-highlighting
-}
-
-# Install Oh My Zsh
+# Install Oh My Zsh (unattended; keeps our .zshrc symlink intact afterwards)
 install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         print_info "Installing Oh My Zsh..."
@@ -117,76 +63,85 @@ install_oh_my_zsh() {
     fi
 }
 
-# Install fzf-tab plugin for Oh My Zsh
-install_fzf_tab() {
-    FZF_TAB_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab"
-    if [ ! -d "$FZF_TAB_DIR" ]; then
-        print_info "Installing fzf-tab plugin..."
-        git clone https://github.com/Aloxaf/fzf-tab "$FZF_TAB_DIR"
-    else
-        print_info "fzf-tab plugin already installed"
-    fi
-}
-
-# Create symlinks
+# Create symlinks for all configs
 create_symlinks() {
     print_info "Creating symlinks..."
-    
-    DOTFILES_DIR=$(pwd)
-    
-    # Create necessary directories
+
+    DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
     mkdir -p ~/.config
-    
+
     # Neovim
     backup_and_remove ~/.config/nvim
     ln -s "$DOTFILES_DIR/nvim" ~/.config/nvim
-    
-    # Alacritty
-    backup_and_remove ~/.config/alacritty.toml
-    ln -s "$DOTFILES_DIR/alacritty/alacritty.toml" ~/.config/alacritty.toml
-    
+
+    # Tmux (Omarchy bakes the active theme's colors into
+    # ~/.local/state/omarchy/current/theme/tmux-theme.conf, which tmux.conf sources)
+    backup_and_remove ~/.config/tmux
+    ln -s "$DOTFILES_DIR/tmux" ~/.config/tmux
+
+    # Alacritty (link only the file: the rest of ~/.config/alacritty stays
+    # Omarchy-managed, and the config imports the active theme automatically)
+    mkdir -p ~/.config/alacritty
+    backup_and_remove ~/.config/alacritty/alacritty.toml
+    ln -s "$DOTFILES_DIR/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
+
+    # Herdr (link only config.toml; the rest of ~/.config/herdr is runtime state)
+    mkdir -p ~/.config/herdr
+    backup_and_remove ~/.config/herdr/config.toml
+    ln -s "$DOTFILES_DIR/herdr/config.toml" ~/.config/herdr/config.toml
+
     # Zsh
     backup_and_remove ~/.zshrc
     ln -s "$DOTFILES_DIR/zsh/.zshrc" ~/.zshrc
-    
-    # Tmux
-    backup_and_remove ~/.config/tmux
-    ln -s "$DOTFILES_DIR/tmux" ~/.config/tmux
-    
-    # Fonts
-    backup_and_remove ~/.fonts
-    ln -s "$DOTFILES_DIR/fonts/.fonts" ~/.fonts
 
-    # Atuin
-    backup_and_remove ~/.config/atuin
-    ln -s "$DOTFILES_DIR/atuin" ~/.config/atuin
-    
     # Oh My Zsh custom theme
     if [ -d "$HOME/.oh-my-zsh" ]; then
         backup_and_remove ~/.oh-my-zsh/themes/custom_clean.zsh-theme
         ln -s "$DOTFILES_DIR/zsh/custom_clean.zsh-theme" ~/.oh-my-zsh/themes/custom_clean.zsh-theme
     fi
-    
+
+    # Atuin
+    backup_and_remove ~/.config/atuin
+    ln -s "$DOTFILES_DIR/atuin" ~/.config/atuin
+
+    # Fonts
+    backup_and_remove ~/.fonts
+    ln -s "$DOTFILES_DIR/fonts/.fonts" ~/.fonts
+
     # Refresh font cache
-    if command -v fc-cache &> /dev/null; then
-        print_info "Refreshing font cache..."
-        fc-cache -fv
+    print_info "Refreshing font cache..."
+    fc-cache -f >/dev/null
+}
+
+# Set Omarchy + system defaults
+set_defaults() {
+    print_info "Setting default applications..."
+    omarchy default terminal alacritty
+    omarchy default editor nvim
+
+    # Set zsh as the default shell
+    if [ "$SHELL" != "$(which zsh)" ]; then
+        print_info "Setting zsh as the default login shell..."
+        chsh -s "$(which zsh)"
+    else
+        print_info "zsh is already the default shell"
     fi
 }
 
 # Main installation
 main() {
-    print_info "Starting dotfiles installation..."
-    
-    detect_os
-    install_homebrew
-    install_tools
+    print_info "Starting dotfiles installation (Omarchy)..."
+
+    check_omarchy
+    install_packages
     install_oh_my_zsh
-    install_fzf_tab
     create_symlinks
-    
+    set_defaults
+
     print_info "Dotfiles installation complete!"
-    print_warn "Please restart your terminal or run: source ~/.zshrc"
+    print_warn "Log out and back in (or restart) so zsh becomes your shell."
+    print_warn "Neovim plugins will be installed automatically on first start."
 }
 
 main

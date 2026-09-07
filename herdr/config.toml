@@ -1,0 +1,63 @@
+onboarding = false
+# Mirrors the Omarchy tmux config in config/tmux/tmux.conf
+# tmux session -> herdr workspace, tmux window -> herdr tab, tmux pane -> herdr pane
+
+[theme]
+# tmux ran on the terminal's own palette (bg=default, fg=default, ANSI blue accents)
+name = "tokyo-night"
+
+auto_switch = false
+[theme.custom]
+# The active tab is drawn as panel_bg text on an accent background, so panel_bg
+# has to be dark for it to read - same colors as status-left's "#[fg=black,bg=blue]"
+panel_bg = "black"
+
+[terminal]
+# Matches -c "#{pane_current_path}" on every split, window, and session
+new_cwd = "follow"
+
+# Atajos estilo tmux para los splits (herdr por defecto usa prefix+v / prefix+minus)
+[keys]
+detach = ["prefix+q", "prefix+d"]
+split_vertical = ["prefix+v", "prefix+%"]
+split_horizontal = ["prefix+minus", "prefix+\""]
+navigate_workspace_down = ["j", "down"]
+navigate_workspace_up = ["k", "up"]
+
+# Popup de lazygit en Ctrl+G, como el display-popup que teniamos en tmux:
+# bind-key -n C-g display-popup -E -w 85% -h 85% -d '#{pane_current_path}' "lazygit"
+[[keys.command]]
+key = "ctrl+g"
+type = "popup"
+command = "lazygit"
+description = "Lazygit popup"
+width = "85%"
+height = "85%"
+
+[ui]
+accent = "blue"
+sidebar_start_collapsed = true
+
+# tmux drew single-line dividers between adjacent panes and no outer frame
+pane_gaps = false
+pane_outer_borders = false
+
+# tmux had no scrollbar column beside its panes
+pane_scrollbars = false
+
+# kill-window and kill-session never asked
+confirm_close = false
+
+# automatic-rename gave windows a name without prompting
+prompt_new_tab_name = false
+
+# set -g mouse on
+mouse_capture = true
+
+# status-right had the zoom flag followed by #h
+tab_bar_right = [{ type = "zoom" }, { type = "hostname" }]
+
+# set -g set-titles on / set -g set-titles-string '#h:#W', where tmux's #W was
+# the basename of the pane cwd. This is what Hyprland shows in the group bar,
+# and it resolves on the server so remote sessions name the remote host.
+window_title = "{hostname}: {workspace}"
