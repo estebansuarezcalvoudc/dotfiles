@@ -117,6 +117,15 @@ set_defaults() {
     omarchy default terminal alacritty
     omarchy default editor nvim
 
+    # Zen browser (AUR) + make it the default
+    if ! command -v zen-browser &> /dev/null; then
+        print_info "Installing Zen browser..."
+        omarchy install browser zen
+    else
+        print_info "Zen browser already installed"
+    fi
+    omarchy default browser zen
+
     # Set zsh as the default shell
     if [ "$SHELL" != "$(which zsh)" ]; then
         print_info "Setting zsh as the default login shell..."
