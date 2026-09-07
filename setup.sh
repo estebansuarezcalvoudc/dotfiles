@@ -26,15 +26,6 @@ backup_and_remove() {
     fi
 }
 
-# Make sure we are on Omarchy (Hyprland-based Arch distribution)
-check_omarchy() {
-    if [ ! -d /usr/share/omarchy ] || ! command -v omarchy &> /dev/null; then
-        print_error "This setup is for Omarchy (https://omarchy.org). Aborting."
-        exit 1
-    fi
-    print_info "Omarchy detected: $(omarchy version 2>/dev/null | head -1)"
-}
-
 # Install needed packages (most already ship with Omarchy; --needed is idempotent)
 install_packages() {
     print_info "Installing packages..."
@@ -42,16 +33,13 @@ install_packages() {
         zsh \
         zsh-autosuggestions \
         zsh-syntax-highlighting \
-        neovim \
-        tmux \
-        alacritty \
         atuin \
         fzf \
         lsd \
         btop \
         lazygit \
-        wl-clipboard
-    # JetBrainsMono Nerd Font ships with Omarchy (ttf-jetbrains-mono-nerd-basic).
+        wl-clipboard \
+        tree
 }
 
 # Install Oh My Zsh (unattended; keeps our .zshrc symlink intact afterwards)
@@ -139,7 +127,6 @@ set_defaults() {
 main() {
     print_info "Starting dotfiles installation (Omarchy)..."
 
-    check_omarchy
     install_packages
     install_oh_my_zsh
     create_symlinks
