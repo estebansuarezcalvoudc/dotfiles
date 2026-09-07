@@ -80,9 +80,8 @@ ris2clip() {
 }
 # <<< Herramientas BibTeX <<<
 
-alias theme-toggle='bash ~/scripts/toggle-theme.sh'
-# Cargar el tema al iniciar la shell
-export THEME_MODE=$(cat ~/.config/theme-mode 2>/dev/null || echo "dark")
+# El tema (claro/oscuro) se sincroniza automáticamente desde Omarchy
+export THEME_MODE=$(grep -m1 '^mode' ~/.local/state/omarchy/current/theme/colors.toml 2>/dev/null | grep -o '"[^"]*"' | tr -d '"' || echo "dark")
 
 
 # >>> Comandos para FSAS/survival_analysis >>>
