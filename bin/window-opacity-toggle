@@ -1,0 +1,33 @@
+#!/bin/bash
+# Toggle the focused window's opacity between 100% and 80%. No blur involved.
+#
+# Uses Hyprland window props (hl.window.set_prop) so the change applies
+# immediately to the focused window, independently per window. State is kept
+# per window address under ~/.local/state/omarchy/toggles/hypr/ (matches
+# Omarchy's own toggle-state convention).
+
+set -u
+
+WIN=$(hyprctl activewindow -j 2>/dev/null | jq -r '.address // empty')
+[ -n "$WIN" ] || exit 0
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy/toggles/hypr"
+STATE="$STATE_DIR/opacity-${WIN//:/_}"
+
+set_prop() {
+  hyprctl dispatch "hl.dsp.window.set_prop({ window = \"address:$WIN\", prop = \"$1\", value = \"$2\" })" >/dev/null 2>&1
+}
+
+# opaque=false makes sure the compositor respects the window's alpha channel.
+if [ -f "$STATE" ]; then
+  set_prop opaque false
+  set_prop opacity 1
+  set_prop opacity_inactive 1
+  rm -f "$STATE"
+else
+  set_prop opaque false
+  set_prop opacity 0.8
+  set_prop opacity_inactive 0.8
+  mkdir -p "$STATE_DIR"
+  : > "$STATE"
+fi

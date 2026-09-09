@@ -83,6 +83,19 @@ create_symlinks() {
     backup_and_remove ~/.config/herdr/config.toml
     ln -s "$DOTFILES_DIR/herdr/config.toml" ~/.config/herdr/config.toml
 
+    # Hyprland user overrides (link only the files we own; the rest of
+    # ~/.config/hypr stays Omarchy-managed)
+    mkdir -p ~/.config/hypr
+    backup_and_remove ~/.config/hypr/hyprland.lua
+    ln -s "$DOTFILES_DIR/hypr/hyprland.lua" ~/.config/hypr/hyprland.lua
+    backup_and_remove ~/.config/hypr/bindings.lua
+    ln -s "$DOTFILES_DIR/hypr/bindings.lua" ~/.config/hypr/bindings.lua
+
+    # Window opacity toggle script (~/.local/bin is on PATH)
+    mkdir -p ~/.local/bin
+    backup_and_remove ~/.local/bin/window-opacity-toggle
+    ln -s "$DOTFILES_DIR/bin/window-opacity-toggle" ~/.local/bin/window-opacity-toggle
+
     # Zsh
     backup_and_remove ~/.zshrc
     ln -s "$DOTFILES_DIR/zsh/.zshrc" ~/.zshrc
